@@ -2,6 +2,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -17,6 +18,7 @@ public class Program
         builder.Services
             .AddApplicationInsightsTelemetryWorkerService()
             .ConfigureFunctionsApplicationInsights()
+            .AddSingleton<ISbClient, SbClient>()
             .Configure<TelemetryConfiguration>((config) =>
             {
                 // Find the AdaptiveSamplingTelemetryProcessor and disable sampling by setting percentage to 100%
@@ -28,6 +30,11 @@ public class Program
                 {
                     adaptiveSamplingProcessor.MinSamplingPercentage = 100;
                 }
+            })
+            .AddAzureClients(clientBuilder =>
+            {
+                clientBuilder.AddServiceBusClient(Environment.GetEnvironmentVariable("sbconnstring"))
+                .WithName("sbClient");
             });
 
         await builder.Build().RunAsync();

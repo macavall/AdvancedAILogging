@@ -46,9 +46,11 @@ public class Program
                 Console.WriteLine("Registered Logger Providers during Configuration:");
 
                 logging.AddApplicationInsights(
-                    configure => configure.IncludeScopes = true,
-                    options => { }
-                    );
+                    options =>
+                    {
+                        options.IncludeScopes = true; // Include logging scopes in Application Insights
+                    }
+                );
 
                 foreach (var provider in logging.Services.Where(s => s.ServiceType == typeof(ILoggerProvider)))
                 {

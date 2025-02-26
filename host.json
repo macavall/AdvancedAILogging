@@ -11,7 +11,11 @@
       "Host.ScaleMonitor": "Trace",
       "Function": "Trace",
       "Microsoft.Azure.WebJobs.ServiceBus": "Trace",
-      "Microsoft.Azure.Functions.Worker": "Trace"
+      "Microsoft.Azure.Functions.Worker": "Trace",
+      "Host.Triggers.ServiceBus": "Trace",
+      "Host.Controllers.Scale": "Trace",
+      "Host.Aggregator": "Trace",
+      "Azure.Messaging.ServiceBus": "Trace"
     },
     "applicationInsights": {
       "samplingSettings": {

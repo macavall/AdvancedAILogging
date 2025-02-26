@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "serbus5656fa": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7152",
+      "launchBrowser": false
+    }
+  }
+}

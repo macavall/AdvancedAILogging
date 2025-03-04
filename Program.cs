@@ -6,6 +6,11 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 public class Program
 {
@@ -32,12 +37,12 @@ public class Program
                 {
                     adaptiveSamplingProcessor.MinSamplingPercentage = 100;
                 }
-            })
-            .AddAzureClients(clientBuilder =>
-            {
-                clientBuilder.AddServiceBusClient(Environment.GetEnvironmentVariable("sbconnstring"))
-                .WithName("sbClient");
             });
+            //.AddAzureClients(clientBuilder =>
+            //{
+            //    clientBuilder.AddServiceBusClient(Environment.GetEnvironmentVariable("sbconnstring"))
+            //    .WithName("sbClient");
+            //});
             // Step 1: Inspect logging providers during configuration
             builder.Services
             .AddLogging(logging =>
@@ -64,61 +69,6 @@ public class Program
         await app.RunAsync();
     }
 }
-
-// Custom service to explore logging categories
-//public class LoggerExplorerService : IHostedService
-//{
-//    private readonly ILogger<LoggerExplorerService> _logger;
-//    private readonly ILoggerFactory _loggerFactory; // Inject ILoggerFactory directly
-
-//    public LoggerExplorerService(ILogger<LoggerExplorerService> logger, ILoggerFactory loggerFactory)
-//    {
-//        _logger = logger;
-//        _loggerFactory = loggerFactory;
-//    }
-
-//    public Task StartAsync(CancellationToken cancellationToken)
-//    {
-//        // Step 3: List providers using the injected ILoggerFactory
-//        Console.WriteLine("\nActive ILogger Providers:");
-//        var providersField = _loggerFactory.GetType().GetField("_loggerProviders", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-//        if (providersField?.GetValue(_loggerFactory) is IEnumerable<object> providers)
-//        {
-//            foreach (var provider in providers)
-//            {
-//                Console.WriteLine($"- {provider.GetType().FullName}");
-//            }
-//        }
-
-//        // Step 4: Test common logging categories
-//        Console.WriteLine("\nTesting Common Logging Categories:");
-//        TestCategory("Host");
-//        TestCategory("Host.ScaleMonitor");
-//        TestCategory("Host.Aggregator");
-//        TestCategory("Host.Triggers.ServiceBus");
-//        TestCategory("Function");
-//        TestCategory("Microsoft.Azure.WebJobs.ServiceBus");
-//        TestCategory("Microsoft.Azure.Functions.Worker");
-//        TestCategory("Host.Controllers.Scale");
-//        TestCategory("Microsoft.ApplicationInsights");
-//        TestCategory("Azure.Messaging.ServiceBus");
-
-//        return Task.CompletedTask;
-//    }
-
-//    private void TestCategory(string category)
-//    {
-//        var testLogger = _loggerFactory.CreateLogger(category); // Use the injected ILoggerFactory
-//        testLogger.LogInformation($"Testing logging category: {category}");
-//        Console.WriteLine($"- {category}");
-//    }
-
-//    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
-//}
-
-// Placeholder for ISbClient and SbClient (assuming these exist in your codebase)
-//public interface ISbClient { }
-//public class SbClient : ISbClient { }
 
 public interface ILoggingExplorerResultService
 {
@@ -177,8 +127,8 @@ public class LoggerExplorerService : IHostedService
         TestCategory("Microsoft.Azure.WebJobs.ServiceBus");
         TestCategory("Microsoft.Azure.Functions.Worker");
         TestCategory("Host.Controllers.Scale");
-        TestCategory("Microsoft.ApplicationInsights");
-        TestCategory("Azure.Messaging.ServiceBus");
+        //TestCategory("Microsoft.ApplicationInsights");
+        //TestCategory("Azure.Messaging.ServiceBus");
 
         return Task.CompletedTask;
     }

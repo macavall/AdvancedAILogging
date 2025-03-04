@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Azure;
+using System.Threading.Tasks;
 
 public class SbClient : ISbClient
 {
